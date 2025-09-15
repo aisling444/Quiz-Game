@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Quiz!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: aliceblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+
+    .progress-bar {
+      height: 10px;
+      width: 100%;
+      background: #cccccc;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #b3d4fc ;
+      transition: width 0.3s ease;
+    }
+
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #b3d4fc;
+      color: white;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.3rem;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: cornflowerblue;
+    }
+
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+
+    .wrong {
+      color: red;
+      font-weight: bold;
+    }
+
+    .score {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="quiz-container">
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
+  </div>
+  <div class="question" id="question"></div>
+  <input type="text" id="answer" placeholder="Type your answer">
+  <button onclick="checkAnswer()">Submit</button>
+  <button onclick="nextQuestion()" id="nextBtn" style="display:none;">Next Question</button>
+  <p id="result"></p>
+  <p class="score" id="score"></p>
+</div>
+
+<script>
+  const quiz = [
+    ["What is the capital of Burkina Faso?", "Ouagadougou"],
+    ["What is the term used for a group of flamingos?", "Flamboyance"],
+    ["What year was Heinz established?", "1869"],
+    ["What is Oology the study of?", "Eggs"],
+    ["What does 'Fitz' mean at the beginning of a surname?", "Son of"],
+    ["Which country is known as the Land of the Thunder Dragon?", "Bhutan"],
+    ["How many eyes does a bee have?", "5"],
+    ["Who invented scissors?", "Da Vinci"],
+    ["What is the hottest planet in our solar system?", "Venus"],
+    ["What is a more popular name for the portrait titled 'La Gioconda'?", "The Mona Lisa"],
+    ["What is the longest running band still featuring its original lineup?", "U2"]
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    if (currentQuestion < quiz.length) {
+      document.getElementById("question").textContent = quiz[currentQuestion][0];
+      document.getElementById("answer").value = "";
+      document.getElementById("result").textContent = "";
+      document.getElementById("nextBtn").style.display = "none";
+      updateProgress();
+    } else {
+      document.getElementById("question").textContent = "Quiz Finished!";
+      document.getElementById("answer").style.display = "none";
+      document.querySelector("button").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("score").textContent = `Your final score: ${score} / ${quiz.length}`;
+    }
+  }
+
+  function checkAnswer() {
+    const userAnswer = document.getElementById("answer").value.trim();
+    const correctAnswer = quiz[currentQuestion][1];
+
+    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+      document.getElementById("result").innerHTML = `<span class="correct">Correct!!</span>`;
+      score++;
+    } else {
+      document.getElementById("result").innerHTML = `<span class="wrong">Wrong!! The answer is ${correctAnswer}.</span>`;
+    }
+
+    document.getElementById("nextBtn").style.display = "inline-block";
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    loadQuestion();
+  }
+
+  function updateProgress() {
+    const progressPercent = (currentQuestion / quiz.length) * 100;
+    document.getElementById("progress").style.width = progressPercent + "%";
+  }
+  
+  window.onload = loadQuestion;
+</script>
+</body>
+</html>
+
